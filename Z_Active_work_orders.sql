@@ -13,7 +13,10 @@ SELECT
 		WHEN w.Divisions LIKE '%_SP_%' THEN 'special-projects@nacgroup.com'
 		ELSE NULL
 	END AS Division_email
-	,w.Service_Area
+	,CASE
+		WHEN w.Service_Area = '' THEN NULL
+		ELSE w.Service_Area
+	END AS Service_Area
 	-- Sales rep information and contact
 	,CASE
 		WHEN TRIM(c.SLPRSNID) = '' THEN NULL
@@ -40,10 +43,6 @@ SELECT
 			THEN LEFT(TRIM(w.Caller_Phone), 10)
 		WHEN LEN(TRIM(w.Caller_Phone)) = 10
 			THEN TRIM(w.Caller_Phone)
-		--WHEN LEN(TRIM(w.Caller_Phone)) > 10
-		--	THEN CONCAT(LEFT(w.Caller_Phone, 10), ';', RIGHT(TRIM(w.Caller_Phone), 4))
-		--WHEN LEN(TRIM(w.Caller_Phone)) = 10 AND RIGHT(TRIM(w.Caller_Phone), 4) = 0
-		--	THEN LEFT(TRIM(w.Caller_Phone), 10)
 		ELSE NULL
 	END AS Location_ContactPhone
 	--,LEFT(w.Caller_Phone, 10) AS Location_ContactPhone
@@ -56,8 +55,8 @@ SELECT
 	END AS Tech_ID
 	,NULL AS Tech_Name
 	,NULL AS Tech_Email
-	,TRIM(w.Bill_Customer_Number) AS Customer_Code														-- For matching against locations
-	,TRIM(w.ADRSCODE) AS Location_Code															-- For matching against locations
+	,TRIM(w.Bill_Customer_Number) AS Customer_Code									-- For matching against locations
+	,TRIM(w.ADRSCODE) AS Location_Code												-- For matching against locations
 	,CASE																			-- For matching against contracts
 		WHEN TRIM(w.Contract_Number) = '' THEN NULL
 		ELSE TRIM(w.Contract_Number)
