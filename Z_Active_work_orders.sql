@@ -15,15 +15,70 @@ SELECT
 	END AS Division_email
 	,w.Service_Area
 	-- Sales rep information and contact
-
+	,CASE
+		WHEN TRIM(c.SLPRSNID) = '' THEN NULL
+		ELSE TRIM(c.SLPRSNID) 
+	END AS SalesRep_Code
 	-- Site information and contact
-	,TRIM(w.ADRSCODE) AS Location_Code
-	,TRIM(w.Caller_Name) AS Location_ContactName
-	,TRIM(w.Caller_Email_Address) AS Location_ContactEmail
-	,TRIM(w.Caller_Phone) AS Location_ContactPhone
-	,*
+	,TRIM(l.ADDRESS1) AS Job_Address1
+	--,TRIM(l.Address2) AS Job_Address2
+	,TRIM(l.CITY) AS Job_City
+	,TRIM(l.STATE) AS Job_State
+	,TRIM(l.ZIP) AS Job_Zip
+	,CASE
+		WHEN w.Caller_Name = '' THEN NULL
+		ELSE TRIM(w.Caller_Name)
+	END AS Location_ContactName
+	,CASE
+		WHEN w.Caller_Email_Address = '' THEN NULL
+		ELSE TRIM(w.Caller_Email_Address)
+	END AS Location_ContactEmail
+	,CASE
+		WHEN LEN(TRIM(w.Caller_Phone)) > 10 AND RIGHT(TRIM(w.Caller_Phone), 4) > 1
+			THEN CONCAT(LEFT(w.Caller_Phone, 10), ';', RIGHT(TRIM(w.Caller_Phone), 4))
+		WHEN LEN(TRIM(w.Caller_Phone)) > 10 AND RIGHT(TRIM(w.Caller_Phone), 4) = 0
+			THEN LEFT(TRIM(w.Caller_Phone), 10)
+		WHEN LEN(TRIM(w.Caller_Phone)) = 10
+			THEN TRIM(w.Caller_Phone)
+		--WHEN LEN(TRIM(w.Caller_Phone)) > 10
+		--	THEN CONCAT(LEFT(w.Caller_Phone, 10), ';', RIGHT(TRIM(w.Caller_Phone), 4))
+		--WHEN LEN(TRIM(w.Caller_Phone)) = 10 AND RIGHT(TRIM(w.Caller_Phone), 4) = 0
+		--	THEN LEFT(TRIM(w.Caller_Phone), 10)
+		ELSE NULL
+	END AS Location_ContactPhone
+	--,LEFT(w.Caller_Phone, 10) AS Location_ContactPhone
+	--,RIGHT(TRIM(w.Caller_Phone), 4) AS Location_ContactPhoneExt
+	-- Work order information
+	,TRIM(w.Service_Description) AS WO_Name
+	,CASE 
+		WHEN TRIM(w.Technician_ID) = '' THEN NULL
+		ELSE TRIM(w.Technician_ID)
+	END AS Tech_ID
+	,NULL AS Tech_Name
+	,NULL AS Tech_Email
+	,TRIM(w.Bill_Customer_Number) AS Customer_Code														-- For matching against locations
+	,TRIM(w.ADRSCODE) AS Location_Code															-- For matching against locations
+	,CASE																			-- For matching against contracts
+		WHEN TRIM(w.Contract_Number) = '' THEN NULL
+		ELSE TRIM(w.Contract_Number)
+	END AS Contract_Number
+	--,*
 FROM
 	SV00300 AS w
+	JOIN
+	SV00200 AS l
+		ON TRIM(w.Bill_Customer_Number) = TRIM(L.CUSTNMBR) 
+		AND TRIM(w.ADRSCODE) = TRIM(L.ADRSCODE)
+	LEFT JOIN
+	SV00500 AS c
+		ON TRIM(w.Contract_Number) = TRIM(c.Contract_Number)
+		--AND TRIM(w.Bill_Customer_Number) = TRIM(c.CUSTNMBR)
+
 
 WHERE
 	TRIM(w.Status_of_Call) = 'Open'
+
+
+--SELECT * FROM SV00500
+--SELECT * FROM UPR00100
+--SELECT distinct(JOBTITLE) AS Job_Code,FIRST_VALUE(CONCAT(TRIM(FRSTNAME), ' ', TRIM(LASTNAME))) over(partition by JOBTITLE order by CAST(EMPLOYID AS int)) AS Empl_Name FROM UPR00100
