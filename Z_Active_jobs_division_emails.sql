@@ -3,6 +3,11 @@ SELECT
 	,j.Location_Code
 	,j.Division_Code
 	,CASE
+		WHEN Division_Code LIKE '%_HVAC_%' THEN 'Service'
+		WHEN Division_Code LIKE '%_SP_%' THEN 'Special Projects'
+		ELSE NULL
+	END AS Division_name
+	,CASE
 		WHEN Division_Code LIKE '%_HVAC_%' THEN 'dispatch@nacgroup.com'
 		WHEN Division_Code LIKE '%_SP_%' THEN 'special-projects@nacgroup.com'
 		ELSE NULL
