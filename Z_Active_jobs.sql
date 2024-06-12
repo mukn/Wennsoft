@@ -24,15 +24,23 @@ SELECT
 	,TRIM(l.CITY) AS Job_City
 	,TRIM(l.STATE) AS Job_State
 	,TRIM(l.ZIP) AS Job_Zip
-	,CAST(j.Schedule_Start_Date AS date) AS Date_SchedStart
-	,CAST(j.Sched_Completion_Date AS date) AS Date_SchedComplete
-	,CAST(j.ACTCOMPDATE AS date) AS Date_ActualComplete
-	
+	,CASE
+		WHEN CAST(j.Schedule_Start_Date AS date) = '1900-01-01' THEN NULL
+		ELSE CAST(j.Schedule_Start_Date AS date)
+	END AS Date_SchedStart
+	,CASE
+		WHEN CAST(j.Sched_Completion_Date AS date) = '1900-01-01' THEN NULL
+		ELSE CAST(j.Sched_Completion_Date AS date)
+	END AS Date_SchedComplete
+	,CASE
+		WHEN CAST(j.ACTCOMPDATE AS date) = '1900-01-01' THEN NULL
+		ELSE CAST(j.ACTCOMPDATE AS date)
+	END AS Date_ActualComplete
 	,TRIM(J.Bill_Customer_Number) AS Customer_Code                            -- For matching against locations.
 	,TRIM(J.Job_Address_Code) AS Location_Code                                -- For matching against locations.
-	,*
+	--,*
 FROM
-	JC00102 AS J
+	JC00102 AS J	-- By definition, this table contains open jobs
 	JOIN
 	SV00200 AS L
 		ON TRIM(J.Bill_Customer_Number) = TRIM(L.CUSTNMBR) 
