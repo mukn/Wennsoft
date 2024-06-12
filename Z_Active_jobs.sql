@@ -1,8 +1,9 @@
+-- Active jobs
 SELECT
 	TRIM(j.WS_Job_Number) AS Job_Number
 	,TRIM(j.Divisions) AS Division_Code
-	,NULL AS Division_Name
-	,NULL AS Division_Email
+	,e.Division_name AS Division_Name
+	,e.Division_email AS Division_Email
 	,CASE
 		WHEN CAST(Estimator_ID AS int) = 0 THEN NULL
 		ELSE CAST(Estimator_ID AS int)
@@ -45,4 +46,7 @@ FROM
 	SV00200 AS L
 		ON TRIM(J.Bill_Customer_Number) = TRIM(L.CUSTNMBR) 
 		AND TRIM(J.Job_Address_Code) = TRIM(L.ADRSCODE)
+	LEFT JOIN
+	Z_Active_jobs_division_emails AS e
+		ON TRIM(j.WS_Job_Number) = e.Job_Number
 ORDER BY Job_Number
