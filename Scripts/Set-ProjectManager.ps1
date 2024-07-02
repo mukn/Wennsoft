@@ -14,5 +14,5 @@ param (
 $WS_Job_Number = $Job_Number
 $WS_Manager_ID = $PM
 
-$qry = "UPDATE JC00102 SET WS_Manager_ID = `"$WS_Manager_ID`" WHERE WS_Job_Number = `"$WS_Job_Number`""
+$qry = "UPDATE JC00102 SET WS_Manager_ID = '$WS_Manager_ID' WHERE WS_Job_Number = '$WS_Job_Number'"
 return $qry
