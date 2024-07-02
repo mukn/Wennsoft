@@ -23,7 +23,11 @@ $sqlcmd.Connection = $sqlConn
 $query = " --INSERT THE COMMAND HERE-- "
 $sqlcmd.CommandText = $query
 
-# Create the data adapter
+## From here, the next command is dependent on the query/command to run
+# Run the non-query command
+$sqlCmd.ExecuteNonQuery()
+
+# For query commands, create the data adapter
 $adp = New-Object System.Data.SqlClient.SqlDataAdapter $sqlcmd
 
 # Create and retreive the data
