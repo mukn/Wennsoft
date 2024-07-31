@@ -22,10 +22,10 @@ SELECT
 
 	-- Contract information
 	,TRIM(c.Contract_Number) AS Contract_Number
-	,NULL AS Contract_StartDate
-	,NULL AS Contract_EndDate
+	,CONVERT(date, c.Contract_Start_Date) AS Contract_StartDate
+	,CONVERT(date, c.Contract_Expiration_Date) AS Contract_EndDate
 	,NULL AS Contract_VisitCnt
-	,NULL AS Contract_Value
+	,c.Contract_Amount AS Contract_Value
 
 	-- Technician information
 	,TRIM(c.Technician_ID) AS Tech_ID
@@ -42,3 +42,11 @@ FROM
 	LEFT JOIN
 	Z_Active_customers AS cust
 		ON TRIM(c.CUSTNMBR) = cust.Customer_Code
+	--LEFT JOIN
+	--SV00300 AS v
+	--	ON TRIM(c.Contract_Number) = TRIM(v.Contract_Number)
+
+
+SELECT * FROM SV00500
+SELECT TRIM(Contract_Number) AS CNum,* FROM SV00300 WHERE Contract_Number <> '' ORDER BY TRIM(Contract_Number) -- 2380, includes T&M plus MCC
+SELECT * FROM SV00300 WHERE Type_Call_Short = 'MC' -- 275
