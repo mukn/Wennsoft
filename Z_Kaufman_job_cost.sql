@@ -16,20 +16,24 @@ SELECT
 		WHEN CONVERT(int, j.Estimator_ID) > 0 THEN CONVERT(int, j.Estimator_ID)
 		ELSE NULL
 	END AS Sales_Rep_ID
-	,emp_s.Employee_FirstName AS Sales_Rep_First_Name
-	,emp_s.Employee_LastName AS Sales_Rep_Last_Name
+	,CONCAT(emp_s.Employee_FirstName, ' ', emp_s.Employee_LastName) AS Sales_Rep_Name
+	--,emp_s.Employee_FirstName AS Sales_Rep_First_Name
+	--,emp_s.Employee_LastName AS Sales_Rep_Last_Name
 	,CASE
 		WHEN CONVERT(int, j.WS_Manager_ID) > 0 THEN CONVERT(int, j.WS_Manager_ID)
 		ELSE NULL
 	END AS Project_Manager_ID
-	,emp_m.Employee_FirstName AS Project_Manager_First_Name
-	,emp_m.Employee_LastName AS Project_Manager_Last_Name
+	,CONCAT(emp_m.Employee_FirstName, ' ', emp_m.Employee_LastName) AS Project_Manager_Name
+	--,emp_m.Employee_FirstName AS Project_Manager_First_Name
+	--,emp_m.Employee_LastName AS Project_Manager_Last_Name
 	,CASE
 		WHEN CONVERT(int, j2.WS_Manager_ID_2) > 0 THEN CONVERT(int, j2.WS_Manager_ID_2)
 		ELSE NULL
 	END AS Project_Supervisor_ID
-	,emp_f.Employee_FirstName AS Project_Supervisor_First_Name
-	,emp_f.Employee_LastName AS Project_Supervisor_Last_Name
+	,CONCAT(emp_f.Employee_FirstName, ' ', emp_f.Employee_LastName) AS Project_Supervisor_Name
+	--,emp_f.Employee_FirstName AS Project_Supervisor_First_Name
+	--,emp_f.Employee_LastName AS Project_Supervisor_Last_Name
+
 	-- Begin forcasts
 	,j.Total_Forecasted_Cost AS Forecast_Total
 	,j.Forecast_Equipment_TTD AS Forecast_Equipment
@@ -37,6 +41,7 @@ SELECT
 	,j.Forecast_Materials_TTD AS Forecast_Materials
 	,j.Forecast_UserDef1 AS Forecast_Subcontract
 	,j.Forecast_UserDef2 AS Contingency
+
 	-- Begin costs
 	,j.Total_Actual_Cost AS Cost_Total
 	,j.Act_Labor_Cost_YTD AS Cost_Labor
@@ -44,6 +49,7 @@ SELECT
 	,j.Act_Equipment_Cost_YTD AS Cost_Equipment
 	,j.Act_Cost_YTD_UserDef1
 	,j.Act_Cost_YTD_UserDef2
+	
 	-- Begin commits
 	,j.Committed_Cost AS Committed_Total
 	,j.Committed_Equipment_TTD AS Committed_Equipment
@@ -52,6 +58,7 @@ SELECT
 	,j.Committed_Subs_TTD AS Committed_Subcontract
 	,j.Committed_TTD_UserDef1
 	,j.Committed_TTD_UserDef2
+	
 	-- Begin labor hours
 	,j.Est_Labor_Units_TTD AS Estimated_Labor_Hours
 	,j.Act_Labor_Units_TTD AS Actual_Labor_Hours
@@ -61,6 +68,28 @@ SELECT
 		ELSE NULL
 	END AS Last_Billing_Date
 	,j.Est_Labor_Cost
+	
+	-- Begin calculated fields
+	,j.Forecast_Equipment_TTD - j.Act_Equipment_Cost_YTD AS Remaining_Equipment
+	,j.Forecast_Materials_TTD - j.Act_Materials_Cost_YTD AS Remaining_Material
+	,CASE
+		WHEN j.Est_Labor_Cost > 0 THEN j.Est_Labor_Cost - j.Act_Labor_Cost_YTD
+		ELSE NULL
+	END AS Remaining_Labor
+	,j.Forecast_UserDef1 - j.Act_Cost_YTD_UserDef1 AS Remaining_Subcontract
+	,CASE
+		WHEN j.Est_Labor_Units_TTD > 0 THEN j.Est_Labor_Units_TTD - j.Act_Labor_Cost_TTD
+		ELSE NULL
+	END AS Remaining_Hours
+	,CASE
+		WHEN j.Act_Labor_Units_TTD > 0 THEN j.Act_Labor_Cost_YTD / j.Act_Labor_Units_TTD
+		ELSE NULL
+	END AS Actual_Labor_Rate
+	,CASE
+		WHEN j.Est_Labor_Cost > 0 THEN j.Est_Labor_Cost / j.Est_Labor_Units_TTD
+		ELSE NULL
+	END AS Estimated_Labor_Rate
+
 FROM
 	JC00102 AS j
 	LEFT OUTER JOIN
