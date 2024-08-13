@@ -21,6 +21,7 @@ AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
+	SET @Action_DateTime = CURRENT_TIMESTAMP;
 	SET NOCOUNT ON;
 
     -- Insert into credit hold table (Z_SV00200_Credit_Hold)
