@@ -15,7 +15,7 @@ ALTER PROCEDURE [dbo].[Z_CreateCreditHoldRecord]
 	-- Add the parameters for the stored procedure here
 	@Customer_Code char(15),
 	@Location_Code char(15),
-	@Credit_Hold_Flag tinyint,
+	@Credit_Hold_Flag tinyint = 1,
 	@Action_DateTime datetime
 AS
 BEGIN
