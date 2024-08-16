@@ -4,6 +4,11 @@ SELECT
 	,TRIM(s.Resolution_Description) AS Resolution_Description
 	,TRIM(s.Status_of_Call) AS Complete_Status
 	,TRIM(s.Service_Description) AS Description
+	,TRIM(l.LOCATNNM) AS Location_Name
+	,CASE
+		WHEN TRIM(s.Type_Call_Short) = 'MCC' THEN 'PM'
+		ELSE NULL
+	END AS PM_Flag
 	--,TRIM(s.Technician) AS Technician_ID
 	,t.Technician AS Technician_ID
 	,TRIM(s.Type_Call_Short) AS Call_Type_ID
@@ -25,6 +30,10 @@ FROM
 	LEFT OUTER JOIN
 	SV00115 AS t
 		ON s.Technician = t.Technician_ID
+	LEFT OUTER JOIN
+	SV00200 AS l
+		ON s.CUSTNMBR = l.CUSTNMBR
+			AND s.ADRSCODE = l.ADRSCODE
 
 WHERE
 	s.Status_of_Call <> 'CLOSED'
