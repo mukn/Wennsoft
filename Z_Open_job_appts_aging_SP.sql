@@ -17,7 +17,8 @@ FROM
 	SV00301 AS a
 		ON j.WS_Job_Number = a.WS_Job_Number
 WHERE
-	j.Divisions LIKE '%_SP_%'
-	AND Appointment_Status <> 'COMPLETE'
+	j.Divisions LIKE '%_SP_%'					-- Select only Special Projects items
+	AND Appointment_Status <> 'COMPLETE'		-- Select only appointments not marked complete
+	AND (GETDATE() - a.Task_Date ) > 30			-- Select only appointments aged by 30 or more days
 ORDER BY
 	j.WS_Job_Number DESC, a.Appointment ASC
