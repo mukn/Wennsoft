@@ -1,0 +1,24 @@
+-- Open job appointments for Service
+SELECT
+	TRIM(j.WS_Job_Number) AS Job_Number
+	,TRIM(a.Appointment) AS Appt_Number
+	,TRIM(a.Appointment_Status) AS Appt_Status
+	,a.Task_Date AS Appt_Date
+	,TRIM(a.Technician) AS Technician
+	,TRIM(a.Appointment_Description) AS Appt_Description
+	,TRIM(j.WS_Job_Name) AS Job_Name
+	,TRIM(CUSTNMBR) AS Customer_Code
+	,TRIM(Job_Address_Code) AS Location_Code
+	--,j.*
+	--,a.*
+FROM
+	JC00102 AS j
+	JOIN
+	SV00301 AS a
+		ON j.WS_Job_Number = a.WS_Job_Number
+WHERE
+	j.Divisions LIKE '%_HVAC_%'					-- Select only Special Projects items
+	AND Appointment_Status <> 'COMPLETE'		-- Select only appointments not marked complete
+	AND (GETDATE() - a.Task_Date ) > 30			-- Select only appointments aged by 30 or more days
+ORDER BY
+	j.WS_Job_Number DESC, a.Appointment ASC
