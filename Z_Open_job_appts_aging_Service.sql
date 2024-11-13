@@ -17,7 +17,7 @@ FROM
 	SV00301 AS a
 		ON j.WS_Job_Number = a.WS_Job_Number
 WHERE
-	j.Divisions LIKE '%_HVAC_%'					-- Select only Special Projects items
+	j.Divisions LIKE '%_HVAC_%'					-- Select only Service items
 	AND Appointment_Status <> 'COMPLETE'		-- Select only appointments not marked complete
 	AND (GETDATE() - a.Task_Date ) > 30			-- Select only appointments aged by 30 or more days
 ORDER BY
