@@ -1,13 +1,25 @@
-/** This pulls a list of all active locations. **/
-SELECT
-	TRIM(L.ADRSCODE) AS Location_Code
-	,TRIM(L.LOCATNNM) AS Location_Name
-	,TRIM(L.ADDRESS1) AS Location_Address1
-	,TRIM(L.CITY) AS Location_City
-	,TRIM(L.STATE) AS Location_State
-	,TRIM(L.ZIP) AS Location_ZIP
-	,TRIM(L.SLPRSNID) AS Sales_Rep
-	,TRIM(L.CUSTNMBR) AS Customer_Code
-	,TRIM(L.CUSTNAME) AS Customer_Name
-	--,*
-FROM SV00200 AS L
+SELECT 
+    TRIM(CUSTNMBR) AS Customer_code, 
+    TRIM(CUSTNAME) AS Customer_name, 
+    TRIM(ADRSCODE) AS Location_code, 
+    TRIM(LOCATNNM) AS Location_name, 
+    TRIM(ADDRESS1) AS Location_Address1, 
+    '' AS Location_Address2, 
+    TRIM(CITY) AS Location_city, 
+    TRIM(STATE) AS Location_state, 
+    TRIM(ZIP) AS Location_ZIP, 
+    TRIM(SLPRSNID) AS SalesRep_code, 
+    '' AS SalesRep_email, 
+    SUBSTRING(PHONE1, 1, 10) AS Site_Phone1, 
+    SUBSTRING(PHONE2, 1, 10) AS Site_Phone2, 
+    '' AS Special_instructions,
+	CASE
+		WHEN c.Contract_Number IS NOT NULL THEN 'Contract'
+		ELSE 'Non-contract'
+	END AS Contract_flag
+FROM 
+    SV00200 AS l
+	LEFT OUTER JOIN
+	Z_Active_service_contracts AS c
+		ON TRIM(l.CUSTNMBR) = c.Customer_Code
+		AND TRIM(ADRSCODE) = c.Location_Code
