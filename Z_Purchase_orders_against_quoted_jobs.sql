@@ -1,0 +1,10 @@
+
+SELECT 
+	--TOP 1000 
+	TRIM(PONUMBER) AS PO_number,
+	TRIM(JOBNUMBR) AS Job_number
+	--,* 
+FROM
+	WS10101 
+WHERE 
+	JOBNUMBR <> ''
