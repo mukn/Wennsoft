@@ -1,3 +1,14 @@
+function Test-ReadAccess
+{
+    $users = @((get-acl 'C:\Windows\Temp').Access | Select-Object -ExpandProperty IdentityReference)
+    for ($i = 0; $i -lt $users.Count; $i++)
+    {
+        if ($users[$i] -eq "BUILTIN\Users")
+        {
+            Write-Host "Access Allowed"
+        }
+    }
+}
 function Test-LiaisonPrinterExists {
   $liaisonShare = "\\nac-k2a-23\LiaisonEDD\"
   $liaisonPrinters = Get-Printer | Where-Object DriverName -eq "Amyuni Document Converter 550"
@@ -11,17 +22,18 @@ function Test-LiaisonPrinterExists {
     Write-Host "Liaison is not functional."
     $level = "Error"
     }
+    return $level
 }
 
 function Invoke-ItEventLog {
   param (
     [Parameter(Mandatory=$true)]
-    [string[]] $Source,
+    [string] $Source,
     [Parameter(Mandatory=$true)]
-    [string[]] $Description,
+    [string] $Description,
     [Parameter(Mandatory=$true)]
     [ValidateSet("Success", "Info", "Error")]
-    [string[]] $Level = "Info"
+    [string] $Level
   )
 
   # Construct JSON payload
@@ -41,9 +53,11 @@ function Invoke-ItEventLog {
 $source = "Liaison printer service test"
 $hostname = $env:COMPUTERNAME
 $description = "Liaison printer service test on $hostname"
+$level
 
 # Run test
-Test-LiaisonPrinterExists
+$level = Test-LiaisonPrinterExists
+Test-ReadAccess
 
 # Send info to IT event log
 Invoke-ItEventLog -Source $source -Description $description -Level $level
