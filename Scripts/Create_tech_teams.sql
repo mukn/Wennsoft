@@ -25,7 +25,7 @@ VALUES
 	('439','JasoBarbee','Barbee, Jason','jason.barbee@nacgroup.com','Team 4'),
 	('493','JUSTBARBEE','Barbee, Justin','justin.barbee@nacgroup.com','Team 1'),
 	('579','Zbarbee','Barbee, Zach','zachary.barbee@nacgroup.com','Team 3'),
-	('720','Bbarnes'',''Barnes'','' Bryan','bryan.barnes@nacgroup.com','Team 1'),
+	('720','Bbarnes','Barnes, Bryan','bryan.barnes@nacgroup.com','Team 1'),
 	('297','Sbarnes','Barnes, Sean','sbarnes@nacgroup.com','Team 4'),
 	('1748','Bbell','Bell, Braden','','Team 2'),
 	('1664','Cbenton','Benton, Chad','chad.benton@nacgroup.com','Team 4'),
