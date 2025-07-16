@@ -114,7 +114,8 @@ VALUES
 	('701','COGORMAN','O''Gorman, Christopher','chris.ogorman@nacgroup.com','Special Projects'),
 	('2077','THILL','O''Neil, Timothy','timothy.o''neil@nacgroup.com','Special Projects'),
 	('639','RPASCHKE','Paschke, Randy','randy.paschke@nacgroup.com','Special Projects'),
-	('2109','BTEJADA','Tejada, Brian','','Special Projects');
+	('2109','BTEJADA','Tejada, Brian','','Special Projects')
+	('484','RDILLMAN','Lunsford, Jeremy - RDillman','jlunsford@nacgroup.com','IT');
 
 
 
