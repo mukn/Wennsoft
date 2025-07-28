@@ -19,6 +19,8 @@ CREATE TABLE Z_Technician_team_assignments (
 
 INSERT INTO Z_Technician_team_assignments (EmployeeID, TechnicianID, EmployeeName, EmployeeEmail, Team)
 VALUES 
+	-- To add an employee, add another row using the following template:
+	-- ('Employee number', 'Technician ID', 'Employee name (last, first)', 'Employee email', 'Division or team')
 	('1597','JALEJANDRO','Alejandro, Jonathon','jonathon.alejandro@nacgroup.com','Team 1'),
 	('553','Sallnutt','Allnutt, Stacee','stacee.allnutt@nacgroup.com','Team 3'),
 	('677','LAPPEL','Appel, Lucas','lucas.appel@nacgroup.com','Team 1'),
@@ -114,9 +116,10 @@ VALUES
 	('701','COGORMAN','O''Gorman, Christopher','chris.ogorman@nacgroup.com','Special Projects'),
 	('2077','THILL','O''Neil, Timothy','timothy.o''neil@nacgroup.com','Special Projects'),
 	('639','RPASCHKE','Paschke, Randy','randy.paschke@nacgroup.com','Special Projects'),
-	('2109','BTEJADA','Tejada, Brian','','Special Projects')
-	('484','RDILLMAN','Lunsford, Jeremy - RDillman','jlunsford@nacgroup.com','IT');
-
+	('2109','BTEJADA','Tejada, Brian','','Special Projects'),
+	('484','RDILLMAN','Lunsford, Jeremy - RDillman','jlunsford@nacgroup.com','IT'),
+	('2340', '', 'Rogers, Michael', '', 'Special Projects');
+	
 
 
 UPDATE Z_Technician_team_assignments
