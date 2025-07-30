@@ -1,70 +1,118 @@
 SELECT
-    TRIM(po.PONUMBER) AS Purchasing_PO,
-    rc.Receipt_PO,
-    po.DOCDATE AS Document_Date,
-    CASE po.POSTATUS
-        WHEN 1 THEN 'New'
-        WHEN 2 THEN 'Released'
-        WHEN 3 THEN 'Change order'
-        WHEN 4 THEN 'Received'
-        WHEN 5 THEN 'Closed'
-        WHEN 6 THEN 'Cancelled'
-    END AS PO_Status,
-    CASE po.STATGRP
-        WHEN 0 THEN 'Voided'
-        WHEN 1 THEN 'Active'
-        WHEN 2 THEN 'Closed'
-    END AS PO_Status_Group,
-    CASE po.POTYPE
-        WHEN 1 THEN 'Standard'
-        WHEN 2 THEN 'Drop ship'
-        WHEN 3 THEN 'Blanket'
-        WHEN 4 THEN 'Blanket drop ship'
-    END AS PO_Type,
-    po.SUBTOTAL AS PO_subtotal,
-    po.TAXAMNT AS PO_tax,
-    rc.Invoice_number,
-    rc.Vendor_name,
-    rc.Trx_source,
-    rc.Receipt_number,
-    rc.Receipt_subtotal,
-    rc.Receipt_tax
-
-FROM dbo.POP10100 AS po
-  LEFT OUTER JOIN 
-    (
-      SELECT 
-          TRIM(r.POPRCTNM) AS Receipt_number,
-          TRIM(r.PONUMBER) AS Receipt_PO,
-          TRIM(h.VNDDOCNM) AS Invoice_number,
-          h.TRXSORCE AS Trx_source,
-          h.VENDNAME AS Vendor_name,
-          SUM(r.EXTDCOST) AS Receipt_subtotal,
-          SUM(r.TAXAMNT) AS Receipt_tax
-      FROM dbo.POP30310 AS r
-      LEFT OUTER JOIN dbo.POP30300 AS h 
-          ON TRIM(r.POPRCTNM) = TRIM(h.POPRCTNM)
-      GROUP BY 
-          TRIM(r.POPRCTNM), 
-          TRIM(r.PONUMBER), 
-          TRIM(h.VNDDOCNM), 
-          h.TRXSORCE, 
-          h.VENDNAME
-    ) AS rc 
-      ON TRIM(po.PONUMBER) = rc.Receipt_PO
-  RIGHT OUTER JOIN 
-    (
-      SELECT
-          TRIM(d.POPRCTNM) AS Receipt_number,
-          d.ACTINDX AS GL_index,
-          g.ACTNUMBR_1
-      FROM POP30390 AS d
-      LEFT OUTER JOIN GL00100 AS g 
-          ON d.ACTINDX = g.ACTINDX
-      WHERE g.ACTINDX = 42
-    ) AS gl 
-      ON gl.Receipt_number = rc.Receipt_number
-
-ORDER BY 
-    Purchasing_PO DESC, 
-    rc.Receipt_number;
+	po.Purchasing_PO,
+	p.Receipt_PO,
+	po.Document_Date,
+	po.PO_Status,
+	po.PO_Status_Group,
+	po.PO_Type,
+	po.PO_subtotal,
+	po.PO_tax,
+	p.Invoice_number,
+	p.Vendor_name,
+	TRIM(d.TRXSORCE) AS Trx_source,
+	g.ACTNUMBR_1 AS Account_number,
+	d.ACTINDX AS GL_code,
+	p.Receipt_number,
+	p.Receipt_subtotal,
+	p.Receipt_tax,
+	d.CRDTAMNT,
+	d.ORCRDAMT,
+	d.DEBITAMT,
+	d.ORDBTAMT
+FROM
+	(
+	SELECT
+		TRIM(p.PONUMBER) AS Purchasing_PO,
+		p.DOCDATE AS Document_Date,
+		CASE p.POSTATUS
+			WHEN 1 THEN 'New'
+			WHEN 2 THEN 'Released'
+			WHEN 3 THEN 'Change order'
+			WHEN 4 THEN 'Received'
+			WHEN 5 THEN 'Closed'
+			WHEN 6 THEN 'Cancelled'
+		END AS PO_Status,
+		CASE p.STATGRP
+			WHEN 0 THEN 'Voided'
+			WHEN 1 THEN 'Active'
+			WHEN 2 THEN 'Closed'
+		END AS PO_Status_Group,
+		CASE p.POTYPE
+			WHEN 1 THEN 'Standard'
+			WHEN 2 THEN 'Drop ship'
+			WHEN 3 THEN 'Blanket'
+			WHEN 4 THEN 'Blanket drop ship'
+		END AS PO_Type,
+		p.SUBTOTAL AS PO_subtotal,
+		p.TAXAMNT AS PO_tax
+		--,*
+	FROM
+		POP10100 AS p
+		UNION
+	SELECT
+		TRIM(p.PONUMBER) AS Purchasing_PO,
+		p.DOCDATE AS Document_Date,
+		CASE p.POSTATUS
+			WHEN 1 THEN 'New'
+			WHEN 2 THEN 'Released'
+			WHEN 3 THEN 'Change order'
+			WHEN 4 THEN 'Received'
+			WHEN 5 THEN 'Closed'
+			WHEN 6 THEN 'Cancelled'
+		END AS PO_Status,
+		CASE p.STATGRP
+			WHEN 0 THEN 'Voided'
+			WHEN 1 THEN 'Active'
+			WHEN 2 THEN 'Closed'
+		END AS PO_Status_Group,
+		CASE p.POTYPE
+			WHEN 1 THEN 'Standard'
+			WHEN 2 THEN 'Drop ship'
+			WHEN 3 THEN 'Blanket'
+			WHEN 4 THEN 'Blanket drop ship'
+		END AS PO_Type,
+		p.SUBTOTAL AS PO_subtotal,
+		p.TAXAMNT AS PO_tax
+		--,*
+	FROM
+		POP30100 AS p
+	) AS po
+	LEFT OUTER JOIN
+	(
+		SELECT 
+			TRIM(r.POPRCTNM) AS Receipt_number,
+			h.RCPTLNNM AS Receipt_LineNumber,
+			TRIM(h.PONUMBER) AS Receipt_PO,
+			TRIM(r.VNDDOCNM) AS Invoice_number,
+			h.TRXSORCE AS Trx_source,
+			r.VENDNAME AS Vendor_name,
+			SUM(h.EXTDCOST) AS Receipt_subtotal,
+			SUM(h.TAXAMNT) AS Receipt_tax
+		FROM POP30300 AS r
+		LEFT OUTER JOIN 
+		POP30310 AS h 
+			ON TRIM(r.POPRCTNM) = TRIM(h.POPRCTNM)
+		GROUP BY 
+			TRIM(r.POPRCTNM), 
+			TRIM(h.PONUMBER),
+			h.RCPTLNNM,
+			TRIM(r.VNDDOCNM), 
+			h.TRXSORCE, 
+			r.VENDNAME
+	) AS p
+		ON po.Purchasing_PO = p.Receipt_PO
+	LEFT OUTER JOIN
+	POP30390 AS d
+		ON
+			p.Receipt_number = d.POPRCTNM
+			AND p.Trx_source = TRIM(d.TRXSORCE)
+			AND p.Receipt_LineNumber = d.SEQNUMBR
+	LEFT OUTER JOIN
+	GL00100 AS g
+		ON d.ACTINDX = g.ACTINDX
+WHERE
+	--p.Receipt_PO = 'PO0099001' AND                        -- For qc
+	(g.ACTINDX = 40 OR g.ACTINDX = 42)
+ORDER BY
+	Purchasing_PO ASC,
+	Receipt_number
