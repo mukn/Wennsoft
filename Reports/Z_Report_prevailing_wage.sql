@@ -75,4 +75,27 @@ FROM
 	) AS l
 		ON 
 			TRIM(j.CUSTNMBR) = l.Customer_code AND
-TRIM(j.Job_Address_Code) = l.Location_code
+			TRIM(j.Job_Address_Code) = l.Location_code
+
+
+
+
+
+
+
+
+
+
+-- Job transaction open, limited to labor
+	-- To be grouped and reduced to earliest date by MIN() to create start date
+select * from JC20001 WHERE Cost_Element = 1
+
+
+/**		References
+
+select * from GL00100				-- Account master
+SELECT * FROM JC00102
+select * from JC00701				-- Job detail master
+select * FROM SV00200				-- 
+
+*/
