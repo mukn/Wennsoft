@@ -9,7 +9,7 @@ SELECT
 	END AS Division_name
 	,CASE
 		WHEN Division_Code LIKE '%_HVAC_%' THEN 'dispatch@nacgroup.com'
-		WHEN Division_Code LIKE '%_SP_%' THEN 'special-projects@nacgroup.com'
+		WHEN Division_Code LIKE '%_SP_%' THEN 'sp_operations@nacgroup.com'
 		ELSE NULL
 	END AS Division_email
 FROM
