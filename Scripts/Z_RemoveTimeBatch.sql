@@ -1,4 +1,4 @@
-/**      Remove_TimeBatch
+/**      Z_RemoveTimeBatch
   
   Removes a time batch based on name. Place the batch name into the variable.
   
