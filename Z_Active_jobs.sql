@@ -2,8 +2,16 @@
 SELECT
 	TRIM(j.WS_Job_Number) AS Job_Number
 	,TRIM(j.Divisions) AS Division_Code
-	,e.Division_name AS Division_Name
-	,e.Division_email AS Division_Email
+	,CASE
+		WHEN j.Divisions LIKE '%_HVAC_%' THEN 'Service'
+		WHEN j.Divisions LIKE '%_SP_%' THEN 'Special Projects'
+		ELSE NULL
+	END AS Division_name
+	,CASE
+		WHEN j.Divisions LIKE '%_HVAC_%' THEN 'dispatch@nacgroup.com'
+		WHEN j.Divisions LIKE '%_SP_%' THEN 'sp_operations@nacgroup.com'
+		ELSE NULL
+	END AS Division_email
 	,CASE
 		WHEN CAST(Estimator_ID AS int) = 0 THEN NULL
 		ELSE CAST(Estimator_ID AS int)
@@ -46,7 +54,4 @@ FROM
 	SV00200 AS L
 		ON TRIM(J.Bill_Customer_Number) = TRIM(L.CUSTNMBR) 
 		AND TRIM(J.Job_Address_Code) = TRIM(L.ADRSCODE)
-	LEFT JOIN
-	Z_Active_jobs_division_emails AS e
-		ON TRIM(j.WS_Job_Number) = e.Job_Number
 ORDER BY Job_Number
