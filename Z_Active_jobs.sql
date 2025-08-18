@@ -42,7 +42,7 @@ SELECT
 	--,*
 FROM
 	JC00102 AS J	-- By definition, this table contains open jobs
-	JOIN
+	LEFT JOIN
 	SV00200 AS L
 		ON TRIM(J.Bill_Customer_Number) = TRIM(L.CUSTNMBR) 
 		AND TRIM(J.Job_Address_Code) = TRIM(L.ADRSCODE)
