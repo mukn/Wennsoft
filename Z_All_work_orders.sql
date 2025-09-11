@@ -1,3 +1,5 @@
+--ALTER VIEW Z_All_work_orders AS
+
 SELECT
 	TRIM(wo.Service_Call_ID) AS WO_number,
 	TRIM(wo.CUSTNMBR) AS Customer_code,
@@ -16,6 +18,8 @@ SELECT
 	wo.Resolution_ID,
 	wo.Purchase_Order,
 	wo.Date_of_Service_Call,
+	MONTH(wo.Date_of_Service_Call) AS Month_bucket,
+	YEAR(wo.Date_of_Service_Call) AS Year_bucket,
 	wo.Completion_Date,
 	wo.WS_Time_1,
 	wo.Date1,
@@ -32,3 +36,5 @@ FROM
 	(SELECT TRIM(Service_Call_ID) AS WO_number, SUM(Estimate_Hours)/100.0 AS Hours_estimate, SUM(Actual_hours)/100.0 AS Hours_actual 
 	FROM SV00301 GROUP BY Service_Call_ID) AS h
 		ON TRIM(wo.Service_Call_ID) = h.WO_Number
+
+ORDER BY wo.Date_of_Service_Call DESC
