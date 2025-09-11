@@ -1,27 +1,25 @@
+--ALTER VIEW Z_All_work_orders_finance AS
 SELECT
-	TRIM(Service_Call_ID) AS WO_number,
-	TRIM(CUSTNMBR) AS Customer_code,
-	TRIM(ADRSCODE) AS Location_code,
-	TRIM(Divisions) AS Division,
-	Billable_All,
-	Billable_Equipment,
-	Billable_Labor,
-	Billable_Material,
-	Billable_Other,
-	Billable_Subs,
-	Billable_Tax,
-	Cost_All,
-	Cost_Equipment,
-	Cost_Labor,
-	Cost_Material,
-	Cost_Other,
-	Cost_Subs
-
-	--,*
-
-
+	wo.WO_number,
+	wo.Division,
+	wo.Date_of_Service_Call,
+	wo.Month_bucket,
+	wo.Year_bucket,
+	c.Trx_number,
+	c.Anticipated_billable,
+	c.Actual_cost,
+	c.Cost_code,
+	c.Cost_Code_Description,
+	c.TRXSOURC
+	--,wo.*
 FROM
-	SV00300
+	Z_All_work_orders AS wo
+	LEFT OUTER JOIN
+	(SELECT TRIM(Service_Call_ID) AS WO_number, TRIM(Reference_TRX_Number) AS Trx_number, Billing_Amount AS Anticipated_billable,
+		WS_Extended_Cost AS Actual_cost, CASE WHEN Cost_Code_Description <> '' THEN Cost_Code_Description WHEN TRXSOURC LIKE 'Purch%' THEN 'Material' END AS Cost_code, 
+		Cost_Code_Description, TRXSOURC
+		--,*
+	FROM SV000810) AS c
+		ON wo.WO_number = c.WO_number
 
--- This one is probably better for the costs
-select * from SV000810 WHERE Service_Call_ID = '250623-0018'
+--ORDER BY wo.Date_of_Service_Call DESC
