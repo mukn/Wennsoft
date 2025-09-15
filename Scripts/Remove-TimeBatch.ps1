@@ -7,7 +7,7 @@ function Remove-TimeBatch {
   Notes:
   DECLARE @batchId varchar(30);
   SET @batchId = '';
-  DELETE FROM UPR10304 WHERE BACHNUMB = @batchId;
+  DELETE FROM DYNAMICS.dbo.UPR10304 WHERE BACHNUMB = @batchId;
   GO
 
   
