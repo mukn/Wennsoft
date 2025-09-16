@@ -55,6 +55,7 @@ SELECT
 	END AS Tech_ID
 	,NULL AS Tech_Name
 	,NULL AS Tech_Email
+	,w.Purchase_Order AS Customer_PO
 	,TRIM(w.Bill_Customer_Number) AS Customer_Code									-- For matching against locations
 	,TRIM(w.ADRSCODE) AS Location_Code												-- For matching against locations
 	,CASE																			-- For matching against contracts
