@@ -1,0 +1,47 @@
+--ALTER VIEW Z_All_jobs AS
+SELECT
+    TRIM(J.WS_Job_Number) AS Job_Number,
+    TRIM(J.Divisions) AS Division_Code,
+    e.Division_name,
+    e.Division_email,
+    CASE 
+        WHEN CAST(j.Estimator_ID AS int) = 0 THEN NULL 
+        ELSE CAST(j.Estimator_ID AS int) 
+    END AS SalesRep_Number,
+    NULL AS SalesRep_Name,
+    NULL AS SalesRep_Email,
+    CASE 
+        WHEN CAST(j.WS_Manager_ID AS int) = 0 THEN NULL 
+        ELSE CAST(j.WS_Manager_ID AS int) 
+    END AS PM_Number,
+    NULL AS PM_Name,
+    NULL AS PM_Email,
+    NULL AS Site_ContactName,
+    NULL AS Site_ContactEmail,
+    TRIM(J.User_Define_1) AS Job_Description,
+    TRIM(J.WS_Job_Name) AS Job_Name,
+    TRIM(L.ADDRESS1) AS Job_Address1,
+    TRIM(L.CITY) AS Job_City,
+    TRIM(L.STATE) AS Job_State,
+    TRIM(L.ZIP) AS Job_Zip,
+    CASE 
+        WHEN CAST(j.Schedule_Start_Date AS date) = '1900-01-01' THEN NULL 
+        ELSE CAST(j.Schedule_Start_Date AS date) 
+    END AS Date_SchedStart,
+    CASE 
+        WHEN CAST(j.Sched_Completion_Date AS date) = '1900-01-01' THEN NULL 
+        ELSE CAST(j.Sched_Completion_Date AS date) 
+    END AS Date_SchedComplete,
+    CASE 
+        WHEN CAST(j.ACTCOMPDATE AS date) = '1900-01-01' THEN NULL 
+        ELSE CAST(j.ACTCOMPDATE AS date) 
+    END AS Date_ActualComplete,
+    TRIM(J.Bill_Customer_Number) AS Customer_Code,
+    TRIM(J.Job_Address_Code) AS Location_Code
+FROM dbo.JC00102 AS J
+LEFT OUTER JOIN dbo.SV00200 AS L 
+    ON TRIM(J.Bill_Customer_Number) = TRIM(L.CUSTNMBR) 
+    AND TRIM(J.Job_Address_Code) = TRIM(L.ADRSCODE)
+LEFT OUTER JOIN dbo.Z_Active_jobs_division_emails AS e 
+    ON TRIM(J.WS_Job_Number) = e.Job_Number
+ORDER BY Job_Number;
