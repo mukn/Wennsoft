@@ -1,5 +1,6 @@
 SELECT
 	wo.WO_number AS WorkOrderNumber,
+	wo.Status,
 	wo.Division,
 	wo.Date_of_Service_Call,
 	wo.Month_bucket,
@@ -27,3 +28,4 @@ FROM
 	FROM SV000810
 	) AS c 
 		ON wo.WO_number = c.WO_number
+ORDER BY wo.WO_number DESC
