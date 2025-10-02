@@ -19,7 +19,7 @@ SELECT --TOP (1000)
 	,h.SubmissionFormVersion
 	,h.SubmissionNo
 	,h.Date
-	,h.JobNameD
+	,h.JobNameD AS JobName
 	,'MAINTENANCE' AS JobType
 	,h.JobStatus
 	,h.Appointment
