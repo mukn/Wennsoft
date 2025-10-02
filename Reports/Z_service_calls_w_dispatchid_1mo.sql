@@ -8,6 +8,7 @@
 SELECT
 		--TOP 100
 		TRIM(a.Service_Call_ID) AS WO_number
+		,TRIM(a.WS_Job_Number) AS Job_number
 		,TRIM(a.Appointment) AS WO_appt
 		,a.DEX_ROW_ID AS DispatchID
 		,TRIM(a.Appointment_Group_ID) AS Appt_GrpID
