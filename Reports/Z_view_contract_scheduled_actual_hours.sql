@@ -2,7 +2,7 @@
 	This identifies all active contracts, extracts the hours as scheduled during
 	contract entry, and compares that against the actual hours.
 
-	14039 rows on 9 Oct 2025.
+	14043 rows on 9 Oct 2025.
 
 	*/
 --ALTER VIEW Z_view_contract_scheduled_actual_hours AS
@@ -22,6 +22,7 @@ SELECT
 	,CASE WHEN (t.Estimate_Hours > 0) THEN (t.Estimate_Hours / 100.0) ELSE 0 END AS Hours_contractEstimate
 	,a.Hours_estimate AS Appt_hours
 	,a.Hours_actual AS Appt_actual
+	,s.Hours_actual AS Total_hours
 	--,t.Dex_row_id
 	--,a.DEX_ROW_ID
 FROM 
@@ -37,7 +38,21 @@ FROM
 			TRIM(a.Service_Call_ID) <> ''		-- 32907 rows
 	) AS a
 		ON TRIM(t.Service_call_id) = a.Work_number
+	LEFT JOIN
+	(
+		SELECT
+			TRIM(a.Service_Call_ID) AS Work_number, SUM(a.Actual_Hours / 100.0) AS Hours_actual
+		FROM
+			SV00301 AS a WITH (NOLOCK)			-- 51140 rows
+		WHERE
+			TRIM(a.Service_Call_ID) <> ''		-- 14803 rows
+		GROUP BY Service_Call_ID
+	) AS s
+		ON a.Work_number = s.Work_number
 
 WHERE 
 	t.Equipment_ID = 'HOURS'		-- 10526 rows
 	--AND t.Contract_Number = '3900TUNL23'
+
+ORDER BY
+	a.Work_number DESC
