@@ -79,7 +79,7 @@ SELECT
 	,c.Actual_Total_Cost
 	,c.Actual_Contract_Earned
 	,c.Actual_Gross_Profit
-	,c.Actua_Revenue_Recognized
+	,c.Actual_Revenue_Recognized
 	,c.Actual_Billed
 	,c.Contract_Billing_Date
 	,c.Contract_Service_Date
@@ -192,7 +192,7 @@ SELECT
 	,c.Actual_Total_Cost
 	,c.Actual_Contract_Earned
 	,c.Actual_Gross_Profit
-	,c.Actua_Revenue_Recognized
+	,c.Actual_Revenue_Recognized
 	,c.Actual_Billed
 	,c.Contract_Billing_Date
 	,c.Contract_Service_Date
