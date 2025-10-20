@@ -1,4 +1,4 @@
---CREATE VIEW Z_Contract_scheduled_visits_pending AS
+--ALTER VIEW Z_Contract_scheduled_visits_pending AS
 SELECT
 
 	v.Contract_Number
@@ -6,8 +6,9 @@ SELECT
 	,YEAR(v.Schedule_Date) AS Year_scheduled
 	,MONTH(v.Schedule_Date) AS Month_scheduled
 	,CONCAT(YEAR(v.Schedule_Date),FORMAT(v.Schedule_Date, 'MM'),v.Contract_Number) AS Concat_scheduled
+	,v.Hours_estimate
 FROM 
 	-- 8846 rows
-	(SELECT DISTINCT Contract_Number, Schedule_Date FROM SV00585 WHERE Task_code = 'HOURS') AS v
+	(SELECT DISTINCT Contract_Number, Schedule_Date, (Estimate_Hours / 100.) AS Hours_estimate FROM SV00585 WHERE Task_code = 'HOURS') AS v
 ORDER BY 
 	v.Schedule_Date DESC
