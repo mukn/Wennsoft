@@ -23,8 +23,8 @@ SELECT
 	wo.Completion_Date,
 	wo.WS_Time_1,
 	wo.Date1,
-	h.Hours_estimate,
-	h.Hours_actual,
+	est.Hours_estimate,
+	act.Hours_actual,
 	
 	TRIM(wo.Status_of_Call) AS Status,
 	wo.User_Define_1a,
@@ -33,8 +33,10 @@ SELECT
 FROM
 	SV00300 AS wo
 	LEFT JOIN
-	(SELECT TRIM(Service_Call_ID) AS WO_number, SUM(Estimate_Hours)/100.0 AS Hours_estimate, SUM(Actual_hours)/100.0 AS Hours_actual 
-	FROM SV00301 GROUP BY Service_Call_ID) AS h
-		ON TRIM(wo.Service_Call_ID) = h.WO_Number
+	(SELECT Service_Call_ID, Actual_Hours AS Hours_actual FROM csvw_SCID_ActualHoursSUM) AS act
+		ON wo.Service_Call_ID = act.Service_Call_ID
+	LEFT JOIN
+	(SELECT Service_Call_ID, Estimated_Hours AS Hours_estimate FROM csvw_SCID_EstHoursSUM) AS est
+		ON wo.Service_Call_ID = est.Service_Call_ID
 
 ORDER BY wo.Date_of_Service_Call DESC
