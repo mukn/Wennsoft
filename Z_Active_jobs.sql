@@ -1,3 +1,5 @@
+
+--ALTER VIEW Z_Active_jobs AS
 -- Active jobs
 SELECT
 	TRIM(j.WS_Job_Number) AS Job_Number
@@ -45,13 +47,25 @@ SELECT
 		WHEN CAST(j.ACTCOMPDATE AS date) = '1900-01-01' THEN NULL
 		ELSE CAST(j.ACTCOMPDATE AS date)
 	END AS Date_ActualComplete
+	,u.Superintendent
+	,u.Engineer
+	,u.Est_hoursOT
+	,u.Est_manpower
+	,u.Foreman
+	,u.Projected_hours
+	,u.Date_Salesforce
+	,u.Permit_reqd
+	,u.Flag_priority
 	,TRIM(J.Bill_Customer_Number) AS Customer_Code                            -- For matching against locations.
 	,TRIM(J.Job_Address_Code) AS Location_Code                                -- For matching against locations.
 	--,*
 FROM
 	JC00102 AS J	-- By definition, this table contains open jobs
 	LEFT JOIN
+	Z_All_jobs_udfs AS u
+		ON j.WS_Job_Number = u.Job_Number
+	LEFT JOIN
 	SV00200 AS L
 		ON TRIM(J.Bill_Customer_Number) = TRIM(L.CUSTNMBR) 
 		AND TRIM(J.Job_Address_Code) = TRIM(L.ADRSCODE)
-ORDER BY Job_Number
+--ORDER BY Job_Number
