@@ -25,6 +25,10 @@ SELECT
 	,CASE
 		WHEN u.User_Define_4 <> '' THEN CAST(u.User_Define_4 AS int)
 		ELSE NULL
+	END AS MaterialAnalysis_code
+	,CASE
+		WHEN u.User_Define_5 <> '' THEN CAST(u.User_Define_5 AS int)
+		ELSE NULL
 	END AS Projected_hours
 	,CASE
 		WHEN u.USRDAT01 <> '' THEN CAST(u.USRDAT01 AS date)
