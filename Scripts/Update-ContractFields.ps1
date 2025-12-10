@@ -3,8 +3,8 @@ $csvData = Import-Csv -Path $csvFile
 
 function Update-ContractFields {
     param(
-        [string]$Server = "k2a.nacgroup.com",
-        [string]$Database = "NAC",
+        [string]$Server = 'k2a.nacgroup.com',
+        [string]$Database = 'NAC',
         [string]$Contract,
     
         [Nullable[float]]$EstCost,
@@ -35,7 +35,7 @@ function Update-ContractFields {
     SELECT TOP 1 *
     FROM SV00500
     WHERE Contract_Number = '$Contract'
-    "@
+"@
     
     $existing = Invoke-Sqlcmd -ServerInstance $Server -Database $Database -Query $querySelect -Encrypt Optional
     
@@ -67,7 +67,7 @@ function Update-ContractFields {
     BEGIN TRAN;
     UPDATE SV00500 SET $setClause WHERE Contract_Number = '$Contract';
     COMMIT TRAN;
-    "@
+"@
     
             try {
                 Invoke-Sqlcmd -ServerInstance $Server -Database $Database -Query $queryUpdate -Encrypt Optional
