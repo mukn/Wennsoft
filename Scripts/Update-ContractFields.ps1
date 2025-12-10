@@ -1,5 +1,3 @@
-$csvFile = ""
-$csvData = Import-Csv -Path $csvFile
 
 function Update-ContractFields {
     param(
@@ -73,13 +71,13 @@ function Update-ContractFields {
                 Invoke-Sqlcmd -ServerInstance $Server -Database $Database -Query $queryUpdate -Encrypt Optional
                 $logEntry = "$timestamp | Contract: $Contract | Updated Fields: $($changes.Keys -join ', ')"
                 #Add-Content -Path $LogFile -Value $logEntry
-                Write-Host "Update successful. Changes logged to $LogFile"
+                Write-Host "Update successful for $Contract. Changes logged to $LogFile"
             }
             catch {
                 Invoke-Sqlcmd -ServerInstance $Server -Database $Database -Query "ROLLBACK TRAN;" -Encrypt Optional
                 $logEntry = "$timestamp | Contract: $Contract | ERROR: $($_.Exception.Message)"
                 #Add-Content -Path $LogFile -Value $logEntry
-                Write-Host "Update failed. Rolled back transaction. Error logged."
+                Write-Host "Update failed for $Contract. Rolled back transaction. Error logged."
             }
         } else {
             Write-Host "No changes detected for contract $Contract."
@@ -90,6 +88,10 @@ function Update-ContractFields {
         #Add-Content -Path $LogFile -Value "$timestamp | Contract: $Contract | Record not found."
     }
 }
+
+$csvFile = ""
+$csvData = Import-Csv -Path $csvFile
+$csvData.Length
 
 foreach ($c in $csvData) {
     # Define temporary variables
@@ -112,11 +114,11 @@ foreach ($c in $csvData) {
     $ForecastLabor2Hours = $c.ForecastLabor2Hours
 
     # Run the update(s)
-    Update-ContractFields
+    Update-ContractFields `
         -Contract $ContractNumber `
         -EstMat $EstimateMaterial -EstCost $EstimateTotalCost `
         -EstLabor $EstimateTotalLabor -EstHours $EstimateTotalLaborHrs `
-        -EstLabor1 $EstimateLabor1 -EstHours1 $EstimateLabor1Hours ` 
+        -EstLabor1 $EstimateLabor1 -EstHours1 $EstimateLabor1Hours `
         -EstLabor2 $EstimateLabor2 -EstHours2 $EstimateLabor2Hours `
         -ForMat $ForecastMaterial -ForCost $ForecastTotalCost `
         -ForLabor $ForecastTotalLabor -ForHours $ForecastTotalLaborHrs `
