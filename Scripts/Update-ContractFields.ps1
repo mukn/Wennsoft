@@ -6,6 +6,7 @@ function Update-ContractFields {
         [string]$Contract,
     
         [Nullable[float]]$EstCost,
+        [Nullable[float]]$EstSub,
         [Nullable[float]]$EstLabor,
         [Nullable[int]]$EstHours,
         [Nullable[float]]$EstLabor1,
@@ -30,12 +31,19 @@ function Update-ContractFields {
     
     # Fetch existing record
     $querySelect = @"
-    SELECT TOP 1 *
+    SELECT TOP 1
+    CUSTNMBR, ADRSCODE, Contract_Number,
+	Estimate_Material, Estimate_Subs, Estimate_Other, Estimate_Total_Cost,
+	Estimate_Labor_1, Estimate_Labor_1_Hours, Estimate_Labor_2, Estimate_Labor_2_Hours,
+	Estimate_Total_Labor, Estimate_Total_Labor_Hrs,
+	Forecast_Material, Forecast_Total_Cost, Forecast_Labor_1, Forecast_Labor_1_Hours,
+	Forecast_Labor_2, Forecast_Labor_2_Hours, Forecast_Total_Labor, Forecast_Total_Labor_Hrs
     FROM SV00500
     WHERE Contract_Number = '$Contract'
 "@
-    
+
     $existing = Invoke-Sqlcmd -ServerInstance $Server -Database $Database -Query $querySelect -Encrypt Optional
+    $existing | Format-List
     
     if ($existing) {
         $changes = @{}
@@ -44,6 +52,7 @@ function Update-ContractFields {
         if ($PSBoundParameters.ContainsKey('EstCost') -and $existing.Estimate_Total_Cost -ne $EstCost) { $changes["Estimate_Total_Cost"] = $EstCost }
         if ($PSBoundParameters.ContainsKey('EstLabor') -and $existing.Estimate_Labor -ne $EstLabor) { $changes["Estimate_Labor"] = $EstLabor }
         if ($PSBoundParameters.ContainsKey('EstHours') -and $existing.Estimate_Hours -ne $EstHours) { $changes["Estimate_Hours"] = $EstHours }
+        if ($PSBoundParameters.ContainsKey('EstSubs') -and $existing.Estimate_Subs -ne $EstSubs) { $changes["Estimate_Subs"] = $EstSub }
         if ($PSBoundParameters.ContainsKey('EstLabor1') -and $existing.Estimate_Labor_1 -ne $EstLabor1) { $changes["Estimate_Labor_1"] = $EstLabor1 }
         if ($PSBoundParameters.ContainsKey('EstHours1') -and $existing.Estimate_Labor_1_Hours -ne $EstHours1) { $changes["Estimate_Labor_1_Hours"] = $EstHours1 }
         if ($PSBoundParameters.ContainsKey('EstLabor2') -and $existing.Estimate_Labor_2 -ne $EstLabor2) { $changes["Estimate_Labor_2"] = $EstLabor2 }
@@ -97,6 +106,7 @@ foreach ($c in $csvData) {
     # Define temporary variables
     $ContractNumber = $c.ContractNumber
     $EstimateMaterial = $c.EstimateMaterial
+    $EstimateSubcontact = $c.EstimateSubcontract
     $EstimateTotalCost = $c.EstimateTotalCost
     $EstimateTotalLabor = $c.EstimateTotalLabor
     $EstimateTotalLaborHrs = $c.EstimateTotalLaborHrs
@@ -113,10 +123,13 @@ foreach ($c in $csvData) {
     $ForecastLabor2 = $c.ForecastLabor2
     $ForecastLabor2Hours = $c.ForecastLabor2Hours
 
+    
+
     # Run the update(s)
     Update-ContractFields `
         -Contract $ContractNumber `
         -EstMat $EstimateMaterial -EstCost $EstimateTotalCost `
+        -EstSub $EstimateSubcontract `
         -EstLabor $EstimateTotalLabor -EstHours $EstimateTotalLaborHrs `
         -EstLabor1 $EstimateLabor1 -EstHours1 $EstimateLabor1Hours `
         -EstLabor2 $EstimateLabor2 -EstHours2 $EstimateLabor2Hours `
