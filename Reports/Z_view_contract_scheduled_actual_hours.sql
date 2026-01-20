@@ -2,7 +2,7 @@
 	This identifies all active contracts, extracts the hours as scheduled during
 	contract entry, and compares that against the actual hours.
 
-	14043 rows on 9 Oct 2025.
+	3218 rows on 20 Jan 2026.
 
 	*/
 --ALTER VIEW Z_view_contract_scheduled_actual_hours AS
@@ -15,13 +15,14 @@ SELECT
         WHEN (t.Estimate_Hours > 0) THEN (t.Estimate_Hours / 100.0)
         ELSE 0 
     END AS [Budget Hours],
-    h.Hours_actual AS Appt_hours
+    h.Hours_actual AS Appt_hours,
+	s.Work_status
 FROM
 	(SELECT 
-		TRIM(Service_Call_ID) AS Work_number
+		TRIM(Service_Call_ID) AS Work_number, TRIM(Appointment_Status) AS Work_status
 		FROM dbo.SV00301 AS a WITH (NOLOCK)
 	WHERE TRIM(Service_Call_ID) <> ''
-	GROUP BY Service_Call_ID
+	GROUP BY Service_Call_ID, Appointment_Status
 		) AS s
 	LEFT OUTER JOIN
 		SV00585 AS t ON TRIM(t.Service_Call_ID) = s.Work_number
