@@ -20,7 +20,7 @@ SELECT
     CASE
 		WHEN c.Multiyear_Contract_Flag = 1 THEN NULL
 		ELSE c.Annual_Contract_Value
-	END AS Annual_Contract_Value,
+	END AS Annual_Contract_Value,								-- This is known to be misreporting value for multiyear contracts
     c.Multiyear_Contract_Flag,
     c.Contract_Start_Date AS Begin_date,
     c.Contract_Expiration_Date AS End_date,
@@ -58,7 +58,7 @@ SELECT
 	CASE
 		WHEN c.Multiyear_Contract_Flag = 1 THEN NULL
 		ELSE c.Annual_Contract_Value
-	END AS Annual_Contract_Value,
+	END AS Annual_Contract_Value,								-- This is known to be misreporting value for multiyear contracts
     c.Multiyear_Contract_Flag,
     c.Contract_Start_Date AS Begin_date,
     c.Contract_Expiration_Date AS End_date,
