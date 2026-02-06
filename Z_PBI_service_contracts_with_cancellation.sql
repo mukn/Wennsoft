@@ -7,7 +7,10 @@
 -- Active Contracts
 -- ALTER VIEW Z_PBI_service_contracts_with_cancellation AS
 SELECT 
-    'Active' AS Status,
+    CASE
+		WHEN c.WS_Closed = 1 THEN 'Inactive'
+		ELSE 'Active'
+	END AS Status,
     c.CUSTNMBR AS Customer_Code,
     c.ADRSCODE AS Location_code,
     -- c.Location_name (commented out)
@@ -27,7 +30,8 @@ SELECT
     c.User_Define_3a AS Cancellation_reason,
     -- c.Bill_Freq AS Billing_frequency_code (commented out)
     c.Contract_Internal_Name,
-    b.Number_Of_Billings AS Number_Of_Billings
+    b.Number_Of_Billings AS Number_Of_Billings,
+	c.WS_Closed
 FROM dbo.SV00500 c
 LEFT JOIN (
     SELECT 
@@ -57,11 +61,12 @@ SELECT
     CASE 
         WHEN c.Service_User_Define_9 > '1990-01-01' THEN c.Service_User_Define_9 
         ELSE NULL 
-    END AS Cancellation_date,
-    c.User_Define_3a AS Cancellation_reason,
+    END AS Cancel_date,
+    c.User_Define_3a AS Cancel_reason,
     -- c.Bill_Freq AS Billing_frequency_code (commented out)
     c.Contract_Internal_Name,
-    b.Number_Of_Billings AS Number_Of_Billings
+    b.Number_Of_Billings AS Number_Of_Billings,
+	c.WS_Closed
 FROM dbo.SV00501 c
 LEFT JOIN (
     SELECT 
