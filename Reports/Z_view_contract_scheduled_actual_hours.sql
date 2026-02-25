@@ -4,6 +4,10 @@
 
 	3218 rows on 20 Jan 2026.
 
+	References:
+		- WS30702 - WS_Time_Sheet_TRX_WORK_HIST
+		- SV00301 - SV_Service_Appointments_MSTR
+
 	*/
 --ALTER VIEW Z_view_contract_scheduled_actual_hours AS
 SELECT
