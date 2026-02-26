@@ -14,7 +14,7 @@
 SELECT
 	m.Customer_code,
 	m.Location_code,
-	m.Contract_code,
+	m.Contract_code AS Contract_number,
 	m.Scheduled_date AS [Visit Date],
 	a.Work_number AS Work_Number,
 	b.Call_status AS Work_status,		-- Needs to be retrieved from SV00300.Status_of_call
