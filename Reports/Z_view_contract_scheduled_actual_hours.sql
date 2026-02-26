@@ -2,36 +2,31 @@
 	This identifies all active contracts, extracts the hours as scheduled during
 	contract entry, and compares that against the actual hours.
 
-	3218 rows on 20 Jan 2026.
+	9510 rows on 26 Feb 2026.
 
 	References:
-		- WS30702 - WS_Time_Sheet_TRX_WORK_HIST
-		- SV00301 - SV_Service_Appointments_MSTR
+		- Z_Contract_service_calls_active - A collection of all active contract service calls
+		- Z_Service_call_budget_hours - A collection of contract service calls with the budget labor hours
+		- Z_Service_call_actual_hours - A collection of contract service calls with the actual labor hours
 
 	*/
 --ALTER VIEW Z_view_contract_scheduled_actual_hours AS
 SELECT
-    TRIM(t.Contract_Number) AS Contract_number,
-    CAST(t.Original_Schedule_Date AS DATE) AS [Visit Date],
-    --TRIM(t.Service_Call_ID) AS Work_number,
-	s.Work_Number,
-    CASE 
-        WHEN (t.Estimate_Hours > 0) THEN (t.Estimate_Hours / 100.0)
-        ELSE 0 
-    END AS [Budget Hours],
-    h.Hours_actual AS Appt_hours,
-	s.Work_status
+	m.Customer_code,
+	m.Location_code,
+	m.Contract_code,
+	m.Scheduled_date AS [Visit Date],
+	a.Work_number AS Work_Number,
+	b.Call_status AS Work_status,		-- Needs to be retrieved from SV00300.Status_of_call
+	b.Budget_hours AS [Budget Hours],
+	a.Actual_hours AS Appt_hours
+	--,b.*
 FROM
-	(SELECT 
-		TRIM(Service_Call_ID) AS Work_number, TRIM(Appointment_Status) AS Work_status
-		FROM dbo.SV00301 AS a WITH (NOLOCK)
-	WHERE TRIM(Service_Call_ID) <> ''
-	GROUP BY Service_Call_ID, Appointment_Status
-		) AS s
+	Z_Contract_service_calls_active AS m
 	LEFT OUTER JOIN
-		SV00585 AS t ON TRIM(t.Service_Call_ID) = s.Work_number
+	Z_Service_call_budget_hours AS b
+		ON m.Work_number = b.Work_number
 	LEFT OUTER JOIN
-		(SELECT TRIM(WS_Job_Number) AS Work_number,SUM(TRXHRUNT / 100.) AS Hours_actual--,'',*
-			FROM WS30702 GROUP BY WS_Job_Number
-		) AS h ON TRIM(t.Service_Call_ID) = h.Work_number
-WHERE t.Equipment_ID = 'HOURS'
+	Z_Service_call_actual_hours AS a
+		ON m.Work_number = a.Work_number
+--ORDER BY m.Work_number DESC
