@@ -17,16 +17,16 @@ SELECT
 	m.Contract_code AS Contract_number,
 	m.Scheduled_date AS [Visit Date],
 	a.Work_number AS Work_Number,
-	b.Call_status AS Work_status,		-- Needs to be retrieved from SV00300.Status_of_call
-	b.Budget_hours AS [Budget Hours],
+	--b.Call_status AS Work_status,		-- Needs to be retrieved from SV00300.Status_of_call
+	a.Budget_hours AS [Budget Hours],
 	a.Actual_hours AS Appt_hours
 	--,b.*
 FROM
 	Z_Contract_service_calls_active AS m
 	LEFT OUTER JOIN
-	Z_Service_call_budget_hours AS b
-		ON m.Work_number = b.Work_number
-	LEFT OUTER JOIN
-	Z_Service_call_actual_hours AS a
+	--Z_Service_call_budget_hours AS b
+	--	ON m.Work_number = b.Work_number
+	--LEFT OUTER JOIN
+	Z_Service_call_actual_and_budget_hours AS a
 		ON m.Work_number = a.Work_number
 --ORDER BY m.Work_number DESC
