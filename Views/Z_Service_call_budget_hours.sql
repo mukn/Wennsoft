@@ -1,4 +1,4 @@
-/*
+/*		THIS IS DEPRECATED. PLEASE USE Z_Service_call_actual_and_budget_hours instead.
 	SV00581 contains tasks per service calls. This is isolated to
 	look at HOURS to retrieve the budget hours per service call.
 */
