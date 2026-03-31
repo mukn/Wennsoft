@@ -1,18 +1,20 @@
-/**		Z_Service_contract_schedule_hours_byMonth
+/**		Z_view_service_contract_schedule_hours_byMonth
 
 	This captures the monthly estimated hours for each contract. Each
 	row represents one year (from start date) of the contract. A one-
 	year contract starting June 2025 may list hours each month, but the 
 	Jan through May values will be for 2026.
 
+	SELECT * FROM Z_view_Service_contract_schedule_hours_byMonth
+
 	*/
--- CREATE VIEW Z_Service_contract_schedule_hours_byMonth AS
+-- ALTER VIEW Z_view_service_contract_schedule_hours_byMonth AS
 SELECT
 	-- TOP 100
 	TRIM(CUSTNMBR) AS Customer_code,
 	TRIM(ADRSCODE) AS Location_code,
 	TRIM(Contract_Number) AS Contract_code,
-	Contract_Year,
+	Contract_Year AS Contract_year,
 	(Jan_Est_Hours / 100.) AS Jan_hrs,
 	(Feb_Est_Hours / 100.) AS Feb_hrs,
 	(March_Est_Hours / 100.) AS Mar_hrs,
@@ -28,7 +30,12 @@ SELECT
 	--,*
 
 FROM
+	--SV585CLP	--	SV_Contract_Tasks_TEMP
 	SV99585		-- SV_Contract_Schedule_View (Dynamic table)
+	-- SV00541		-- SV_Standard_Frequency_Schedule_MSTR (Static schedule)
+	-- SV00582		-- SV_Contract_Task_MSTR 
+	-- SV00400		-- SV_Equipment_MSTR (List of equipment)
 
 WHERE 
+
 	Equipment_ID = 'HOURS'
