@@ -11,31 +11,16 @@
 -- ALTER VIEW Z_view_service_contract_schedule_hours_byMonth AS
 SELECT
 	-- TOP 100
-	TRIM(CUSTNMBR) AS Customer_code,
-	TRIM(ADRSCODE) AS Location_code,
-	TRIM(Contract_Number) AS Contract_code,
-	Contract_Year AS Contract_year,
-	(Jan_Est_Hours / 100.) AS Jan_hrs,
-	(Feb_Est_Hours / 100.) AS Feb_hrs,
-	(March_Est_Hours / 100.) AS Mar_hrs,
-	(April_Est_Hours / 100.) AS Apr_hrs,
-	(May_Est_Hours / 100.) AS May_hrs,
-	(June_Est_Hours / 100.) AS Jun_hrs,
-	(July_Est_Hours / 100.) AS Jul_hrs,
-	(Aug_Est_Hours / 100.) AS Aug_hrs,
-	(Sept_Est_Hours / 100.) AS Sep_hrs,
-	(Oct_Est_Hours / 100.) AS Oct_hrs,
-	(Nov_Est_Hours / 100.) AS Nov_hrs,
-	(Dec_Est_Hours / 100.) AS Dec_hrs
-	--,*
+	TRIM(s.CUSTNMBR) AS Customer_code,
+	TRIM(s.ADRSCODE) AS Location_code,
+	TRIM(s.Contract_Number) AS Contract_code,
+	s.Contract_Year AS Contract_year,
+	s.Schedule_Date,
+	(s.Estimate_Hours / 100.) AS Estimate_hours
+	--,s.*
 
 FROM
-	--SV585CLP	--	SV_Contract_Tasks_TEMP
-	SV99585		-- SV_Contract_Schedule_View (Dynamic table)
-	-- SV00541		-- SV_Standard_Frequency_Schedule_MSTR (Static schedule)
-	-- SV00582		-- SV_Contract_Task_MSTR 
-	-- SV00400		-- SV_Equipment_MSTR (List of equipment)
+	SV00585 AS s		-- SV_Contract_Schedule_View (Dynamic table)
 
-WHERE 
-
+WHERE
 	Equipment_ID = 'HOURS'
