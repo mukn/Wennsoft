@@ -11,6 +11,7 @@ FROM
 SELECT
 	h.PO_number
 	--,l.PO_number
+	,h.PO_status
 	,h.Date_document
 	,l.Work_number
 	,l.Item_number
@@ -22,7 +23,7 @@ SELECT
 	,l.Cost_type
 
 FROM
-	(SELECT TRIM(PONUMBER) AS PO_number, CAST(DOCDATE AS date) AS Date_document FROM POP10100) AS h
+	(SELECT TRIM(PONUMBER) AS PO_number, CAST(DOCDATE AS date) AS Date_document, POSTATUS AS PO_status FROM POP10100) AS h
 	LEFT OUTER JOIN
 	(SELECT --top (1000)
 		TRIM(JOBNUMBR) AS Work_number
@@ -58,6 +59,7 @@ UNION
 SELECT
 	h.PO_number
 	--,l.PO_number
+	,h.PO_status
 	,h.Date_document
 	,l.Work_number
 	,l.Item_number
@@ -69,7 +71,7 @@ SELECT
 	,l.Cost_type
 
 FROM
-	(SELECT TRIM(PONUMBER) AS PO_number, CAST(DOCDATE AS date) AS Date_document FROM POP30100) AS h
+	(SELECT TRIM(PONUMBER) AS PO_number, CAST(DOCDATE AS date) AS Date_document, POSTATUS AS PO_status FROM POP30100) AS h
 	LEFT OUTER JOIN
 	(SELECT --top (1000)
 		TRIM(JOBNUMBR) AS Work_number
