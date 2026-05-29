@@ -2,6 +2,12 @@
 
 
 -- ALTER VIEW Z_Report_Emergency_service_material_costs_13mo AS
+
+SELECT 
+	po.*
+	,emer.Division
+FROM
+(
 SELECT
 	h.PO_number
 	--,l.PO_number
@@ -90,5 +96,12 @@ WHERE
 	l.Work_number LIKE '[0-9][0-9][0-9][0-9][0-9][0-9]-%'	-- Removes jobs
 	AND l.Cost_type = 2
 	AND h.Date_document > GetDate() - 400					-- Limits to last year of data
+) AS po
+	JOIN
+	(SELECT TRIM(Divisions) AS Division,TRIM(Service_Call_ID) AS Work_number
+		--,*
+	FROM SV00300 WHERE TRIM(Divisions) LIKE '%_EMERG'
+	) AS emer
+		ON po.Work_number = emer.Work_number
 
-ORDER BY h.Date_document
+--ORDER BY Date_document
