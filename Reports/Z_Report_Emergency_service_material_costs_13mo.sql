@@ -5,6 +5,14 @@
 
 SELECT 
 	po.*
+	,CASE
+		WHEN PO_status = 1 THEN 'New'
+		WHEN PO_status = 2 THEN 'Released'
+		WHEN PO_status = 3 THEN 'Change order'
+		WHEN PO_status = 4 THEN 'Received'
+		WHEN PO_status = 5 THEN 'Closed'
+		WHEN PO_status = 6 THEN 'Cancelled'
+	END AS PO_status_str
 	,emer.Division
 FROM
 (
