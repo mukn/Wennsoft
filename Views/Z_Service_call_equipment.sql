@@ -9,4 +9,5 @@
 --ALTER VIEW Z_Service_call_equipment AS
 SELECT DISTINCT TRIM(Service_Call_ID) AS WO_number, Equipment_ID
 FROM SV00302
+WHERE Equipment_ID <> 'HOURS'
 --ORDER BY Service_Call_ID, Equipment_ID
