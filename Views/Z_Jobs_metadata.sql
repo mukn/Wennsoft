@@ -1,7 +1,7 @@
 --CREATE VIEW Z_Jobs_metadata AS
 SELECT
-	TRIM(j.WS_Job_Number) AS Job_Number
-	,TRIM(j.Divisions) AS Division_Code
+	TRIM(j.WS_Job_Number) AS Job_number
+	,TRIM(j.Divisions) AS Division_code
 	,CASE
 		WHEN j.Divisions LIKE '%_HVAC_%' THEN 'Service'
 		WHEN j.Divisions LIKE '%_SP_%' THEN 'Special Projects'
@@ -31,8 +31,8 @@ FROM
 UNION
 
 SELECT
-	TRIM(h.WS_Job_Number) AS Job_Number
-	,TRIM(h.Divisions) AS Division_Code
+	TRIM(h.WS_Job_Number) AS Job_number
+	,TRIM(h.Divisions) AS Division_code
 	,CASE
 		WHEN h.Divisions LIKE '%_HVAC_%' THEN 'Service'
 		WHEN h.Divisions LIKE '%_SP_%' THEN 'Special Projects'
