@@ -8,13 +8,14 @@
 	 - UPR40300 - Payroll Department Setup
 
 */
---CREATE VIEW Z_Employee_listing AS 
+--ALTER VIEW Z_Employee_listing AS 
 SELECT 
 	
 	CAST(emp.EMPLOYID AS int) AS Employee_code,
 	TRIM(emp.LASTNAME) AS Employee_LastName,
 	TRIM(emp.FRSTNAME) AS Employee_FirstName,
 	TRIM(emp.JOBTITLE) AS Employee_JobCode,
+	c.Employee_email,
 	TRIM(emp.DEPRTMNT) AS Department_code,
 	TRIM(dep.DSCRIPTN) AS Department_name
 	--,emp.*
@@ -23,5 +24,9 @@ FROM
 	LEFT OUTER JOIN
 	UPR40300 AS dep
 		ON emp.DEPRTMNT = dep.DEPRTMNT
-
+	LEFT OUTER JOIN
+	(SELECT TRIM(Master_ID) AS Employee_code, TRIM(INET1) AS Employee_email FROM SY01200 WHERE Master_Type = 'EMP') AS c
+		ON emp.EmployID = c.Employee_code
+WHERE
+	emp.INACTIVE = 0
 --ORDER BY CAST(emp.EMPLOYID AS int)
