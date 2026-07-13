@@ -1,4 +1,4 @@
---CREATE VIEW Z_Jobs_metadata AS
+--ALTER VIEW Z_Jobs_metadata AS
 SELECT
 	TRIM(j.WS_Job_Number) AS Job_number
 	,TRIM(j.Divisions) AS Division_code
@@ -15,6 +15,7 @@ SELECT
 	,TRIM(j.CUSTNMBR) AS Customer_code
 	,TRIM(j.Job_Address_Code) AS Location_code
 	,TRIM(j.WS_Job_Name) AS Job_description
+	,CAST(j.Calc_Pct_Compl_to_Date AS int) AS Percent_complete
 	,CASE
         WHEN h.Close_Date IS NOT NULL THEN 'Closed'
         WHEN j.WS_Inactive = 1 THEN 'Inactive'
@@ -46,6 +47,7 @@ SELECT
 	,TRIM(h.CUSTNMBR) AS Customer_code
 	,TRIM(h.Job_Address_Code) AS Location_code
 	,TRIM(h.WS_Job_Name) AS Job_description
+	,CAST(h.Calc_Pct_Compl_to_Date AS int) AS Percent_complete
 	,'Closed' AS Job_status
 	,'' AS Job_scope			-- This will likely come from UDFs
 
