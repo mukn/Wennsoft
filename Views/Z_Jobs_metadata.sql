@@ -14,7 +14,8 @@ SELECT
 	END AS Division_email
 	,TRIM(j.CUSTNMBR) AS Customer_code
 	,TRIM(j.Job_Address_Code) AS Location_code
-	,TRIM(j.WS_Job_Name) AS Job_description
+	,TRIM(j.WS_Job_Name) AS Job_name
+	,TRIM(j.User_Define_1) AS Job_description
 	,CAST(j.Calc_Pct_Compl_to_Date AS int) AS Percent_complete
 	,CASE
         WHEN h.Close_Date IS NOT NULL THEN 'Closed'
@@ -46,7 +47,8 @@ SELECT
 	END AS Division_email
 	,TRIM(h.CUSTNMBR) AS Customer_code
 	,TRIM(h.Job_Address_Code) AS Location_code
-	,TRIM(h.WS_Job_Name) AS Job_description
+	,TRIM(h.WS_Job_Name) AS Job_name
+	,TRIM(h.User_Define_1) AS Job_description
 	,CAST(h.Calc_Pct_Compl_to_Date AS int) AS Percent_complete
 	,'Closed' AS Job_status
 	,'' AS Job_scope			-- This will likely come from UDFs
