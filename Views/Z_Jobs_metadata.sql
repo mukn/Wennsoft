@@ -23,6 +23,7 @@ SELECT
         ELSE 'Open'
     END AS Job_status
 	,'' AS Job_scope			-- This will likely come from UDFs
+	,TRIM(j.Job_Address_Code)+TRIM(j.CUSTNMBR) AS XRef_location
 
 FROM
 	JC00102 AS j
@@ -52,6 +53,7 @@ SELECT
 	,CAST(h.Calc_Pct_Compl_to_Date AS int) AS Percent_complete
 	,'Closed' AS Job_status
 	,'' AS Job_scope			-- This will likely come from UDFs
+	,TRIM(h.Job_Address_Code)+TRIM(h.CUSTNMBR) AS XRef_location
 
 FROM
 	JC30001 AS h
