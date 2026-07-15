@@ -31,6 +31,10 @@ SELECT
 		ELSE NULL
 	END AS Projected_hours
 	,CASE
+		WHEN u.User_Define_6 <> '' THEN u.User_Define_6
+		ELSE NULL
+	END AS Job_scope
+	,CASE
 		WHEN u.USRDAT01 <> '' THEN CAST(u.USRDAT01 AS date)
 		ELSE NULL
 	END AS Date_Salesforce
@@ -52,6 +56,16 @@ FROM JC00107 AS u		--WHERE WS_Job_Number = '24040940ET'
 		-- User_Define_3	::	Foreman
 		-- User_Define_4	::	Material Cost Analysis
 		-- User_Define_5	::	Projected Hours
+		-- User_Define_6	::	Scopes
 		-- USRDAT01			::	SalesForce Booking Date
 		-- User_Defined_CB_1	::	Permits Required
 		-- User_Defined_CB_2	::	Priority Job
+
+
+/**  -- Update the labels for the fields in JC40101
+	UPDATE JC40101
+	SET WS_User_Defined_Descript = 'Job scopes'
+	WHERE DEX_ROW_ID = 26
+	--select * from JC40101
+
+*/
