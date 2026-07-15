@@ -1,3 +1,4 @@
+--ALTER VIEW Z_Active_locations AS
 SELECT 
     TRIM(CUSTNMBR) AS Customer_code, 
     TRIM(CUSTNAME) AS Customer_name, 
@@ -16,7 +17,8 @@ SELECT
 	CASE
 		WHEN c.Contract_Number IS NOT NULL THEN 'Contract'
 		ELSE 'Non-contract'
-	END AS Contract_flag
+	END AS Contract_flag,
+    TRIM(CUSTNMBR)+TRIM(ADRSCODE) AS Xref_location
 FROM 
     SV00200 AS l
 	LEFT OUTER JOIN
