@@ -9,9 +9,10 @@
 	of those are likely to reveal trends that are worth pursuing.
 
 */
---CREATE VIEW Z_Report_Scheduled_PM_labor_variance AS
+--ALTER VIEW Z_Report_Scheduled_PM_labor_variance AS
 SELECT
 	b.Work_number,
+	s.Employee_WorkDate,
 	s.Employee_name,
 	b.Actual_hours,
 	b.Appointment_hours AS Budget_hours,
