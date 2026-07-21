@@ -10,9 +10,9 @@
 --ALTER VIEW Z_Service_call_equipment_tasks AS
 WITH ranked_tasks AS (
     SELECT
-        Service_Call_ID,
-        Equipment_ID,
-        Task_code,
+        TRIM(Service_Call_ID) AS Work_number,
+        TRIM(Equipment_ID) AS Equipment_code,
+        TRIM(Task_code) AS Task_code,
         ROW_NUMBER() OVER (
             PARTITION BY Service_Call_ID, Equipment_ID
             ORDER BY
@@ -28,9 +28,9 @@ WITH ranked_tasks AS (
     WHERE Task_code NOT IN ('HOURS', 'DEFAULT')
 )
 SELECT
-    Service_Call_ID,
-    Equipment_ID,
-    Task_code,
+    TRIM(Service_Call_ID) AS Work_number,
+    TRIM(Equipment_ID) AS Equipment_code,
+    TRIM(Task_code) AS Task_code,
     CASE
         WHEN SUBSTRING(Task_code, 1, 3) IN ('AN-', 'SU-', 'WI-') THEN 'Annual maintenance'
         WHEN SUBSTRING(Task_code, 1, 3) IN ('RT-', 'IN-', 'RN-') THEN 'Routine maintenance'
