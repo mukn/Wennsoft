@@ -7,7 +7,7 @@
 
 	SELECT * FROM Z_Equipment_needing_updates
 */
---CREATE VIEW Z_Equipment_needing_updates AS
+--ALTER VIEW Z_Equipment_needing_updates AS
 SELECT		--TOP 100
 	m.SubmissionID AS SubID
 	,m.Username
@@ -18,72 +18,76 @@ SELECT		--TOP 100
 	,CASE
 		WHEN Equipment.Update_flag = 1 THEN 'True'
 	END AS Update_flag,
+	Equipment.Location,
+	Equipment.Make,
+	Equipment.Model_number,
+	Equipment.Serial_number,
 	CONCAT('https://gocanvas.com/submissions/', m.SubmissionID) AS Sub_uri
 	--,*
 FROM 
 	NACGoCanvas.nac.ScheduledPMSubmission AS m
 	LEFT OUTER JOIN
-	(SELECT SubmissionID_List_1 AS SubID, BoilerID_List_1 AS Equipment_ID, Update_Boiler_List_1 AS Update_flag
+	(SELECT SubmissionID_List_1 AS SubID, BoilerID_List_1 AS Equipment_ID, Update_Boiler_List_1 AS Update_flag, Location_List_1 AS Location, Manufacturer_List_1 AS Make, Model_Number_List_1 AS Model_number, SerialNumber_List_1 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist1
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_2 AS SubID, ChillerID_List_2 AS Equipment_ID, Update_Chiller_List_2 AS Update_flag
+		SubmissionID_List_2 AS SubID, ChillerID_List_2 AS Equipment_ID, Update_Chiller_List_2 AS Update_flag, Location_List_2 AS Location, Manufacturer_List_2 AS Make, ModelNumber_List_2 AS Model_number, SerialNumber_List_2 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist2
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_3 AS SubID, CellID_List_3 AS Equipment_ID, Update_CoolingTower_List_3 AS Update_flag
+		SubmissionID_List_3 AS SubID, CellID_List_3 AS Equipment_ID, Update_CoolingTower_List_3 AS Update_flag, Location_List_3 AS Location, Manufacturer_List_3 AS Make, ModelNumber_List_3 AS Model_number, SerialNumber_List_3 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist3
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_4 AS SubID, PumpID_List_4 AS Equipment_ID, Update_Pump_List_4 AS Update_flag
+		SubmissionID_List_4 AS SubID, PumpID_List_4 AS Equipment_ID, Update_Pump_List_4 AS Update_flag, Location_List_4 AS Location, Manufacturer_List_4 AS Make, ModelNumber_List_4 AS Model_number, SerialNumber_List_4 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist4
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_5 AS SubID, AIRHandlingUnitID_List_5 AS Equipment_ID, Update_AHU_List_5 AS Update_flag
+		SubmissionID_List_5 AS SubID, AIRHandlingUnitID_List_5 AS Equipment_ID, Update_AHU_List_5 AS Update_flag, Location_List_5 AS Location, Manufacturer_List_5 AS Make, ModelNumber_List_5 AS Model_number, SerialNumber_List_5 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist5
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_6 AS SubID, FanCoilUnit_List_6 AS Equipment_ID, Update_FanCoil_List_6 AS Update_flag
+		SubmissionID_List_6 AS SubID, FanCoilUnit_List_6 AS Equipment_ID, Update_FanCoil_List_6 AS Update_flag, Location_List_6 AS Location, Manufacturer_List_6 AS Make, ModelNumber_List_6 AS Model_number, SerialNumber_List_6 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist6
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_7 AS SubID, UnitID_List_7 AS Equipment_ID, Update_RTUSCUCRAC_List_7 AS Update_flag
+		SubmissionID_List_7 AS SubID, UnitID_List_7 AS Equipment_ID, Update_RTUSCUCRAC_List_7 AS Update_flag, Location_List_7 AS Location, Manufacturer_List_7 AS Make, ModelNumber_List_7 AS Model_number, SerialNumber_List_7 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist7
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_8 AS SubID, SplitSystemID_List_8 AS Equipment_ID, Update_IndSplitSystem_List_8 AS Update_flag
+		SubmissionID_List_8 AS SubID, SplitSystemID_List_8 AS Equipment_ID, Update_IndSplitSystem_List_8 AS Update_flag, '' AS Location, ManufacturerIU_List_8 AS Make, ModelNumberIU_List_8 AS Model_number, SerialNumberIU_List_8 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist8
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_9 AS SubID, DryCoolerID_List_9 AS Equipment_ID, Update_DryCooler_List_9 AS Update_flag
+		SubmissionID_List_9 AS SubID, DryCoolerID_List_9 AS Equipment_ID, Update_DryCooler_List_9 AS Update_flag, Location_List_9 AS Location, Manufacturer_List_9 AS Make, ModelNumber_List_9 AS Model_number, SerialNumber_List_9 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist9
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_10 AS SubID, ExhaustFanID_List_10 AS Equipment_ID, Update_Fan_List_10 AS Update_flag
+		SubmissionID_List_10 AS SubID, ExhaustFanID_List_10 AS Equipment_ID, Update_Fan_List_10 AS Update_flag, Location_List_10 AS Location, Manufacturer_List_10 AS Make, ModelNumber_List_10 AS Model_number, SerialNumber_List_10 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist10
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_11 AS SubID, VDFID_List_11 AS Equipment_ID, Update_VFD_List_11 AS Update_flag
+		SubmissionID_List_11 AS SubID, VDFID_List_11 AS Equipment_ID, Update_VFD_List_11 AS Update_flag, Location_List_11 AS Location, Manufacturer_List_11 AS Make, ModelNumber_List_11 AS Model_number, SerialNumber_List_11 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist11
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_16 AS SubID, AirCompressorID_List_16 AS Equipment_ID, Update_AirCompressor_List_16 AS Update_flag
+		SubmissionID_List_16 AS SubID, AirCompressorID_List_16 AS Equipment_ID, Update_AirCompressor_List_16 AS Update_flag, Location_List_16 AS Location, Manufacturer_List_16 AS Make, ModelNumber_List_16 AS Model_number, SerialNumber_List_16 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist16
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_17 AS SubID, AirDryerID_List_17 AS Equipment_ID, Update_AirDryer_List_17 AS Update_flag
+		SubmissionID_List_17 AS SubID, AirDryerID_List_17 AS Equipment_ID, Update_AirDryer_List_17 AS Update_flag, Location_List_17 AS Location, Manufacturer_List_17 AS Make, ModelNumber_List_17 AS Model_number, SerialNumber_List_17 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist17
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_18 AS SubID, DuctUnitHeaterID_List_18 AS Equipment_ID, Update_DuctHeater_List_18 AS Update_flag
+		SubmissionID_List_18 AS SubID, DuctUnitHeaterID_List_18 AS Equipment_ID, Update_DuctHeater_List_18 AS Update_flag, Location_List_18 AS Location, Manufacturer_List_18 AS Make, ModelNumber_List_18 AS Model_number, SerialNumber_List_18 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist18
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_19 AS SubID, HeatExchangerID_List_19 AS Equipment_ID, Update_HeatExchanger_List_19 AS Update_flag
+		SubmissionID_List_19 AS SubID, HeatExchangerID_List_19 AS Equipment_ID, Update_HeatExchanger_List_19 AS Update_flag, Location_List_19 AS Location, Manufacturer_List_19 AS Make, ModelNumber_List_19 AS Model_number, SerialNumber_List_19 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist19
 	UNION
 	SELECT --TOP 100 *
-		SubmissionID_List_20 AS SubID, HumidifierType_List_20 AS Equipment_ID, Update_Humidifier_List_20 AS Update_flag
+		SubmissionID_List_20 AS SubID, HumidifierType_List_20 AS Equipment_ID, Update_Humidifier_List_20 AS Update_flag, Location_List_20 AS Location, Manufacturer_List_20 AS Make, ModelNumber_List_20 AS Model_number, SerialNumber_List_20 AS Serial_number
 		FROM NACGoCanvas.nac.scheduledpmsubmissionlist20) AS Equipment
 		ON m.SubmissionID = Equipment.SubID
 
@@ -93,4 +97,4 @@ WHERE
 	m.SubmissionCreationDateTime > GETDATE() - 30
 	AND Equipment.Update_flag = 1
 
-ORDER BY Username ASC
+--ORDER BY Username ASC
