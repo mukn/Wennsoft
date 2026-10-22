@@ -20,7 +20,7 @@ FROM
 		ON a.Service_Call_ID = t.Service_Call_ID
 WHERE
 	(TRIM(a.Service_Call_ID) <> '')
-	AND Appointment_Status <> 'COMPLETE'
+	--AND Appointment_Status <> 'COMPLETE'
 	--AND a.Service_Call_ID = '261001-0098'
 	AND t.Equipment_ID = 'HOURS'
 GROUP BY a.Service_Call_ID, Appointment, t.Estimate_Hours
